@@ -32,7 +32,6 @@ let data = [
   ];
 //資料與介面綁定
 let ticketCardArea = document.querySelector('.ticketCard-area');
-let ticketCardContent = "";
 
 function init(){
   renderTicketArea(data);
@@ -41,6 +40,7 @@ function init(){
 init();
 
 function renderTicketArea(data){
+  let ticketCardContent = "";
   data.forEach(function(item){
     ticketCardContent += `
               <li class="ticketCard">
@@ -77,7 +77,7 @@ function renderTicketArea(data){
   ticketCardArea.innerHTML = ticketCardContent;
 };
 
-// 呈現篩選畫面
+// 篩選資料
 const selectRegion = document.querySelector('.regionSearch');
 const cantFind = document.querySelector('.cantFind-area');
 const searchResultText = document.querySelector("#searchResult-text");
@@ -88,12 +88,11 @@ function renderSelectTicket (e){
   data.forEach(function (item){
     if(e.target.value == item.area){
       selectData.push(item);
-    }else if(e.target.value == ""){
+    }else if(e.target.value == "全部地區"){
       selectData.push(item);
     };
     });
   searchResultText.innerHTML = `本次搜尋共${selectData.length}筆資料`
-  ticketCardContent = "";
   if( selectData.length == 0){
     cantFind.style.display= "block";
     renderTicketArea(selectData);
@@ -101,4 +100,31 @@ function renderSelectTicket (e){
     cantFind.style.display= "none";
     renderTicketArea(selectData);
   }
+};
+
+// 新增資料
+const ticketName = document.querySelector('#ticketName');
+const ticketImgUrl = document.querySelector('#ticketImgUrl');
+const ticketRegion = document.querySelector('#ticketRegion');
+const ticketPrice = document.querySelector('#ticketPrice');
+const ticketNum = document.querySelector('#ticketNum');
+const ticketRate = document.querySelector('#ticketRate');
+const ticketDescription = document.querySelector('#ticketDescription');
+const addTicketBtn = document.querySelector('.addTicket-btn');
+addTicketBtn.addEventListener("click", addTicket);
+
+function addTicket(e){
+  e.preventDefault();
+  let newTicketObj = {};
+  newTicketObj.id = data.length;
+  newTicketObj.name = ticketName.value;
+  newTicketObj.imgUrl = ticketImgUrl.value;
+  newTicketObj.area = ticketRegion.value;
+  newTicketObj.description = ticketDescription.value;
+  newTicketObj.group = ticketNum.value;
+  newTicketObj.price = ticketPrice.value;
+  newTicketObj.rate = ticketRate.value;
+  data.push(newTicketObj);
+  init();
+  [ticketName ,ticketImgUrl, ticketRegion, ticketDescription, ticketNum, ticketPrice, ticketRate].forEach(input => input.value = "");
 };
